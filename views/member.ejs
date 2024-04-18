@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社群留言系統</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #dadada;
+        }
+        .wrap{
+            max-width: 960px;
+            width: 100%;
+            border: 1px solid #ccc;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            position: relative;
+        }
+        .logout{
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        .logout button{
+            padding: 3px 10px;
+            color: #fff;
+            background-color: #f33;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .avatar{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .avatar img{
+            width: 100%;
+            height: 100%;
+        }
+        .comment-user{
+            align-self: flex-start;
+            font-size: 1.5rem;
+            padding: 0 0 10px 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .comment-num{
+            align-self: flex-start;
+            padding-left: 10px;
+        }
+        .comment-input{
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .comment-input .textarea-wrap{
+            width: 100%;
+            padding: 10px;
+        }
+        .comment-input .textarea-wrap textarea{
+            width: 100%;
+            resize: none;
+            padding: 10px;
+            font-size: 1.25rem;
+            border-radius: 10px;
+        }
+        .comment-input button{
+            align-self: flex-end;
+            margin-right: 10px;
+            padding: 8px 30px;
+            background-color: #145c8b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .comment-input::after{
+            content: "";
+            display: block;
+            width: calc(100% - 20px);
+            height: 1px;
+            background-color: #333;
+            position: absolute;
+            bottom: -10px; 
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+        .comment-wrap{
+            margin-top: 20px;
+            width: 100%;
+            align-self: flex-start;
+            padding-left: 10px;
+        }
+        .comment-item{
+            padding: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative;
+        }
+        .comment-item:not(:last-child)::after{
+            content: "";
+            display: block;
+            width: calc(100% - 10px);
+            height: 1px;
+            background-color: #333;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+        .comment-item .user{
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .comment-item .user .user-name{
+            font-size: 1.4rem;
+        }
+        .sort-wrap{
+            display: flex;
+            gap: 10px;
+        }
+        .sort-wrap form button{
+            padding: 2px 8px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: rgba(51, 153, 255, 0.466);
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <form action="/logout" method="GET" class="logout">
+            <button>登出</button>
+        </form>
+        <h1>留言板</h1>
+        <div class="comment-user">
+            <div class="avatar">
+                <img src="/user.png" alt="">
+            </div>    
+            <p><%= data.name %></p>
+        </div>
+        <div class="comment-num">
+            <p>共有<%= result.length %>則留言</p>
+        </div>
+        <form action="/comment" method="POST" class="comment-input">
+            <div class="textarea-wrap">
+                <textarea name="comment" id="" cols="30" rows="10"></textarea>
+            </div>
+            <button>發佈留言</button>
+        </form>
+        <div class="comment-wrap">
+            <div class="sort-wrap">
+                <form action="/member" method="GET">
+                    <button name="sort" value="new" type="submit">由新到舊</button>
+                </form>
+                <form action="/member" method="GET">
+                    <button name="sort" value="old" type="submit">由舊到新</button>
+                </form>
+            </div>
+            <%for(let i = 0; i < result.length; i++){%>
+            <div class="comment-item">   
+                <div class="user">
+                    <div class="avatar">
+                        <img src="/user.png" alt="avatar">
+                    </div>
+                    <p class="user-name"><%= result[i].name %></p>
+                    <p class="date"><%= result[i].date %></p>
+                </div>
+                <div class="comment-text">
+                    <p><%= result[i].comment %></p>
+                </div>     
+            </div>
+            <%}%>
+        </div>
+    </div>
+</body>
+</html>
